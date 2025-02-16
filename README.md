@@ -1,10 +1,5 @@
 ﻿# 🕹️ Walkthrough Overlay  
 
-![GitHub Repo Size](https://img.shields.io/github/repo-size/soaresden/WalkthroughOverlay?style=for-the-badge)  
-![GitHub Last Commit](https://img.shields.io/github/last-commit/soaresden/WalkthroughOverlay?style=for-the-badge)  
-![GitHub Issues](https://img.shields.io/github/issues/soaresden/WalkthroughOverlay?style=for-the-badge)  
-![GitHub License](https://img.shields.io/github/license/soaresden/WalkthroughOverlay?style=for-the-badge)  
-
 ## 📌 **Description**  
 **Walkthrough Overlay** is a **homebrew overlay** for the Nintendo Switch that allows displaying **TXT, PDF, and images** while in-game.  
 Developed using **libtesla**, this overlay provides an easy way to view text guides, images, and documents without leaving your game.  
