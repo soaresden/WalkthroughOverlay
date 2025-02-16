@@ -44,7 +44,7 @@ TARGET		:=	WalkthroughOverlay
 BUILD		:=	build
 SOURCES		:=	source
 DATA		:=	data
-INCLUDES := include libs/libtesla/include libs/json/include libs/mupdf/include libs/stb
+INCLUDES    := include libs/libtesla/include libs/json/include libs/mupdf/include libs/stb
 # ROMFS		:=	romfs
 NO_ICON		:=  1
 
