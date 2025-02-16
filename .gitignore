@@ -7,3 +7,5 @@
 *.log
 *.cache
 *.vscode/
+
+build

@@ -1,4 +1,4 @@
-//TextReader.cpp
+﻿//TextReader.cpp
 #include <TextReader.hpp>
 #include <tesla.hpp>
 #include <string.h>
@@ -8,7 +8,7 @@
 
 std::string TextReaderChunk::EMPTY_STRING = "";
 
-void TextReaderChunk::loadText(FILE *file) {
+void TextReaderChunk::loadText(FILE* file) {
     if (m_lines != nullptr) {
         return;
     }
@@ -45,17 +45,17 @@ std::string& TextReaderChunk::getLine(u32 lineOffset) const {
         return EMPTY_STRING;
 }
 
-TextReader::TextReader(std::string const &path)
+TextReader::TextReader(std::string const& path)
     : m_path(path),
-      m_totalLines(0),
-      m_lineNum(0),
-      m_chunkMid(0),
-      m_loading(false),
-      m_loaded(false),
-      m_font("sdmc:/switch/.overlays/TextReaderOverlay/fonts/font.ttf"),
-      m_size(15),
-      m_panx(0),
-      m_debug(true)
+    m_totalLines(0),
+    m_lineNum(0),
+    m_chunkMid(0),
+    m_loading(false),
+    m_loaded(false),
+    m_font("sdmc:/switch/.overlays/TextReaderOverlay/fonts/font.ttf"),
+    m_size(15),
+    m_panx(0),
+    m_debug(true)
 {
     auto j = Config::read();
     auto resume = j["files"][m_path].find("resume");
@@ -64,19 +64,19 @@ TextReader::TextReader(std::string const &path)
     }
     auto bookmarks = j["files"][m_path].find("bookmarks");
     if (bookmarks != j["files"][m_path].end()) {
-        for (auto &b : *bookmarks) {
+        for (auto& b : *bookmarks) {
             m_bookmarks.insert((u32)b);
         }
     }
-    
 }
+
 TextReader::~TextReader() {
     if (m_file) fclose(m_file);
 }
 
 tsl::elm::Element* TextReader::createUI() {
     auto frame = new tsl::elm::OverlayFrame("", "");
-    auto reader = new tsl::elm::CustomDrawer([this](tsl::gfx::Renderer *renderer, u16 x, u16 y, u16 w, u16 h) {
+    auto reader = new tsl::elm::CustomDrawer([this](tsl::gfx::Renderer* renderer, u16 x, u16 y, u16 w, u16 h) {
         renderer->fillScreen(a({ 0x0, 0x0, 0x0, 0xD }));
         if (!m_loading) {
             renderer->drawString("Loading... May take a few seconds", false, 20, 50, 16, a(0xFFFF));
@@ -131,22 +131,39 @@ tsl::elm::Element* TextReader::createUI() {
 
         u32 progressY = m_lineNum * (tsl::cfg::FramebufferHeight - 20) / m_totalLines;
         renderer->drawRect(0, progressY, 1, 20, a({ 0x8, 0x8, 0x8, 0xF }));
+
+        // Affichage des touches en bas de l'écran
+        const u16 keybindY = tsl::cfg::FramebufferHeight - 73;
+        const u16 lineHeight = 16;
+        const u16 xOffset = 20;
+
+        //renderer->drawString("\uE081 Scroll", false, xOffset, keybindY, 15, a(0xFFFF));
+        renderer->drawString("\uE085 Scroll Faster", false, xOffset, keybindY + lineHeight, 15, a(0xFFFF));
+        renderer->drawString("\uE086 \uE091 \uE090 Scroll Even Faster", false, xOffset, keybindY + lineHeight * 2, 15, a(0xFFFF));
+        renderer->drawString("\uE086 \uE092 \uE093 Top/Bottom", false, xOffset, keybindY + lineHeight * 3, 15, a(0xFFFF));
+
+        const u16 xOffset2 = tsl::cfg::FramebufferWidth / 2 + 20;
+        renderer->drawString("\uE082 \uE07D Font Size", false, xOffset2, keybindY, 15, a(0xFFFF));
+        renderer->drawString("\uE08B Line Start", false, xOffset2, keybindY + lineHeight * 2, 15, a(0xFFFF));
+        renderer->drawString("\uE0A3 Bookmark", false, xOffset2, keybindY + lineHeight * 3, 15, a(0xFFFF));
+        renderer->drawString("\uE0A4 \uE0A5 Nav Bookmarks", false, xOffset2, keybindY + lineHeight * 4, 15, a(0xFFFF));
+
         if (m_debug)
             renderer->drawString(std::to_string(m_fps).c_str(), false, tsl::cfg::FramebufferWidth - 20, 10, 10, a(0xFFFF));
-    });
+        });
 
     frame->setContent(reader);
     reader->setBoundaries(0, 0, tsl::cfg::FramebufferWidth, tsl::cfg::FramebufferHeight);
     return frame;
 }
 
-void TextReader::printLn(std::string const &text, s32 x, s32 y, u32 fontSize, tsl::gfx::Renderer *renderer) const {
+void TextReader::printLn(std::string const& text, s32 x, s32 y, u32 fontSize, tsl::gfx::Renderer* renderer) const {
     m_font.print(text.c_str(), x, y, fontSize, [renderer](s32 x, s32 y, u8 grad) {
         renderer->setPixelBlendSrc(x, y, a({ 0xF, 0xF, 0xF, (u8)(grad >> 4) }));
-    });
+        });
 }
 
-bool TextReader::handleInput(u64 keysDown, u64 keysHeld, const HidTouchState &touchPos, HidAnalogStickState joyStickPosLeft, HidAnalogStickState joyStickPosRight) {
+bool TextReader::handleInput(u64 keysDown, u64 keysHeld, const HidTouchState& touchPos, HidAnalogStickState joyStickPosLeft, HidAnalogStickState joyStickPosRight) {
     if (keysHeld & HidNpadButton_ZR) {
         if (keysHeld & HidNpadButton_StickLUp)
             scrollTo(0);
@@ -178,20 +195,22 @@ bool TextReader::handleInput(u64 keysDown, u64 keysHeld, const HidTouchState &to
             scroll(1);
     }
 
-    if (keysHeld & HidNpadButton_StickLUp)
-        scroll(-1);
+
     if (keysHeld & HidNpadButton_StickLDown)
         scroll(1);
     if (keysHeld & HidNpadButton_StickLLeft)
         m_panx++;
+    if (keysHeld & HidNpadButton_StickLUp)
+        scroll(-1);
     if (keysHeld & HidNpadButton_StickLRight)
         m_panx--;
     if (keysDown & HidNpadButton_StickR)
         m_panx = 0;
 
-    if (keysDown & HidNpadButton_Up)
+    //ZoomIn and ZoomOut
+    if (keysHeld & HidNpadButton_StickRUp)
         m_size++;
-    if (keysDown & HidNpadButton_Down)
+    if (keysHeld & HidNpadButton_StickRDown)
         m_size--;
 
     if (keysDown & HidNpadButton_X)
@@ -233,7 +252,7 @@ void TextReader::scroll(s32 offset) {
     }
     // downwards
     else if (newChunk > m_chunkMid &&
-             (newChunk > m_chunkMid + 1 || newOffset > TextReaderChunk::MAX_SIZE / 2))
+        (newChunk > m_chunkMid + 1 || newOffset > TextReaderChunk::MAX_SIZE / 2))
     {
         for (u32 chunk = std::max(0, (s32)m_chunkMid - 1); chunk < newChunk - 1; ++chunk) {
             unloadText(chunk);
@@ -268,9 +287,9 @@ void TextReader::toggleBookmark() {
     else
         m_bookmarks.erase(m_lineNum);
 
-    Config::update([this](json &j) {
+    Config::update([this](json& j) {
         j["files"][m_path]["bookmarks"] = m_bookmarks;
-    });
+        });
 }
 
 void TextReader::previousBookmark() {
@@ -299,8 +318,8 @@ void TextReader::nextBookmark() {
 }
 
 void TextReader::close() const {
-    Config::update([this](json &j) {
+    Config::update([this](json& j) {
         j["files"][m_path]["resume"] = m_lineNum;
-    });
+        });
     tsl::goBack();
 }
