@@ -78,17 +78,6 @@ If the original repository ever resumes development
 **📜 License**
 This project is licensed under the **MIT License**
 
----
-
-### **🔹 What’s New in This Version?**  
-
-✅ **"Special Thanks" section** properly crediting **Storm21CH**  
-✅ Mention of **Issue #1** and **why you forked the project**  
-✅ Clear and **professional explanation** (no aggressive tone)  
-✅ **All previous features & improvements included**  
-
-
-
 ### **Build Instructions**  
 use the AlreadyMade Batch if you have setup evrything already
 !MakeFileBatchforwindows.bat
