@@ -9,6 +9,12 @@
 **Walkthrough Overlay** is a **homebrew overlay** for the Nintendo Switch that allows displaying **TXT, PDF, and images** while in-game.  
 Developed using **libtesla**, this overlay provides an easy way to view text guides, images, and documents without leaving your game.  
 
+**⭐ Special Thanks**
+This project was initially inspired by **[TextReaderOverlay-NX-Plus by @Storm21CH.]([url](https://github.com/Storm21CH/))**
+
+However, due to lack of response and no action on my **[issue #1]([url](https://github.com/Storm21CH/TextReaderOverlay-NX-Plus/issues/1))**
+I decided to fork the project and implement the necessary improvements myself.
+If the original repository ever resumes development
 ---
 
 ## 🛠 **Features**  
@@ -67,13 +73,6 @@ Commit your changes (git commit -m "Added my feature")
 Push to your fork (git push origin feature/my-feature)
 Open a Pull Request
 All contributions are appreciated!
-
-**⭐ Special Thanks**
-This project was initially inspired by [TextReaderOverlay-NX-Plus by @Storm21CH.]([url](https://github.com/Storm21CH/))
-
-However, due to lack of response and no action on my [issue #1]([url](https://github.com/Storm21CH/TextReaderOverlay-NX-Plus/issues/1))
-I decided to fork the project and implement the necessary improvements myself.
-If the original repository ever resumes development
 
 **📜 License**
 This project is licensed under the **MIT License**
