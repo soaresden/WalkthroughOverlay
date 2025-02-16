@@ -1,79 +1,66 @@
-Text Image PDF Reader Plus
+﻿# 🕹️ Walkthrough Overlay  
 
-A Fullscreen Text, PDF, and Image Viewer Overlay for Nintendo Switch
+![GitHub Repo Size](https://img.shields.io/github/repo-size/soaresden/WalkthroughOverlay?style=for-the-badge)  
+![GitHub Last Commit](https://img.shields.io/github/last-commit/soaresden/WalkthroughOverlay?style=for-the-badge)  
+![GitHub Issues](https://img.shields.io/github/issues/soaresden/WalkthroughOverlay?style=for-the-badge)  
+![GitHub License](https://img.shields.io/github/license/soaresden/WalkthroughOverlay?style=for-the-badge)  
 
-A fork of https://github.com/soaresden/TextImagePDFReaderPlus-NX with added support for PDF and image viewing.
+## 📌 **Description**  
+**Walkthrough Overlay** is a **homebrew overlay** for the Nintendo Switch that allows displaying **TXT, PDF, and images** while in-game.  
+Developed using **libtesla**, this overlay provides an easy way to view text guides, images, and documents without leaving your game.  
 
+---
 
+## 🛠 **Features**  
 
-Version 1.3.0 by Storm / Modified by Soaresden
+✅ **Read TXT files** with bookmarking and adjustable text size  
+✅ **View images (.jpg, .jpeg, .png)** with zoom and navigation  
+✅ **Display PDF files** with zoom and scrolling  
+✅ **Smooth navigation** using Joy-Con and buttons  
+✅ **Auto-save last read position** in files  
+✅ **Minimalist and intuitive UI**  
 
-Added PDF support (View and navigate PDF documents)
+---
 
-Added Image support (View PNG, JPG, BMP images)
+## 🎮 **Controls**  
 
-Fix for FW1600
+| 🕹️ **Action** | 🎮 **Button** |
+|--------------|--------------|
+| **Vertical Scrolling** | 🎛️ Right Stick Up / Down |
+| **Move in text** | 🎛️ Left Stick |
+| **Zoom In / Out** | 🔄 Left / Right Button |
+| **Reset text alignment** | 🔄 Right Stick Press |
+| **Add Bookmark** | ⭐ Y Button |
+| **Go to Previous / Next Bookmark** | ⏩ L / R |
+| **Exit Overlay** | ❌ B Button |
 
-Fix for Dock Mode
+---
 
-Fixed Help Page
+## 📦 **Installation**  
 
-TextReaderOverlay-NX-Plus is an overlay for the Nintendo Switch that lets you view text files, PDFs, and images on top of any foreground application. It is launched with nx-ovlloader and Tesla-Menu. Atmosphere custom firmware is required to run this application.
+### **Requirements**  
+- **Nintendo Switch with CFW** and **Tesla Menu** installed  
+- **MicroSD Card** with **Atmosphère**  
 
-Features
+### **Installation Steps**  
 
-Text Viewer: Read .txt files with bookmarking support.
+1️⃣ Download the latest release from the **[Releases](https://github.com/soaresden/WalkthroughOverlay/releases)** section  
+2️⃣ Copy **WalkthroughOverlay.ovl** to **sd:/switch/.overlays/**  
+3️⃣ Launch a game and **open Tesla Menu** (`L + D-Pad Down + Right Stick`)  
+4️⃣ Select **Walkthrough Overlay** and start reading!  
 
-PDF Viewer: Navigate PDF files with zoom and pan controls.
+---
 
-Image Viewer: View images with zoom and pan functionality.
+## 🖥️ **Building from Source**  
 
-Overlay Functionality: Works over any running application.
+### **Dependencies**  
+- **[DevkitPro](https://devkitpro.org/)**
+- **[libtesla](https://github.com/XorTroll/tesla)**
+- **[libnx](https://github.com/switchbrew/libnx)**
+- **[stb_image](https://github.com/nothings/stb)**
+- **[MuPDF](https://mupdf.com/) ([GitHub](https://github.com/ArtifexSoftware/mupdf))**  
 
-Tesla-Menu Integration: Easy access via Tesla Overlay system.
+### **Build Instructions**  
+use the AlreadyMade Batch if you have setup evrything already
+!MakeFileBatchforwindows.bat
 
-Installation
-
-Download nx-ovlloader and extract it onto your SD card.
-
-Download Tesla-Menu and extract it onto your SD card.
-
-Download TextReaderOverlay-NX-Plus and extract it onto the root of your SD card.
-
-Place *.txt, *.pdf, and *.png/jpg/bmp files anywhere on your SD card.
-
-Press L + D-Pad-Down + R-Stick to launch Tesla-Menu after reboot.
-
-Select TextReaderOverlay-NX-Plus from the menu.
-
-Controls
-
-Text Reader
-
-D-Pad Up/Down: Scroll line by line.
-
-L/R: Scroll page by page.
-
-Y: Toggle bookmark.
-
-B: Exit.
-
-PDF Viewer
-
-L/R: Previous/Next page.
-
-Stick Left: Move zoomed-in page.
-
-ZR/ZL: Zoom in/out.
-
-Stick Click (R3): Toggle double-page view.
-
-Image Viewer
-
-Stick Left: Pan image.
-
-ZR/ZL: Zoom in/out.
-
-Y: Reset zoom.
-
-B: Exit.
