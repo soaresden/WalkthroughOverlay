@@ -1,5 +1,5 @@
+//MainMenu.cpp
 #include <MainMenu.hpp>
-
 #include <Overlay.hpp>
 #include <FileSelect.hpp>
 #include <FavoritesMenu.hpp>
@@ -7,7 +7,7 @@
 #include <LogMenu.hpp>
 
 tsl::elm::Element* MainMenu::createUI() {
-    auto frame = new tsl::elm::OverlayFrame("Text Reader Plus", TEXT_READER_VERSION);
+    auto frame = new tsl::elm::OverlayFrame("Text Image Reader Plus", TEXT_READER_VERSION);
     m_menuItems = new tsl::elm::List();
 
     auto favorites = new tsl::elm::ListItem("Favorites");

@@ -37,14 +37,14 @@ include $(DEVKITPRO)/libnx/switch_rules
 #   of a homebrew executable (.nro). This is intended to be used for sysmodules.
 #   NACP building is skipped as well.
 #---------------------------------------------------------------------------------
-APP_TITLE	:=	Text Reader Plus
-APP_VERSION	:=	1.2.1
-
-TARGET		:=	$(notdir $(CURDIR))
+APP_TITLE	:=	WalkthroughOverlay
+APP_VERSION	:=	1.0
+APP_AUTHOR  :=  Soaresden
+TARGET		:=	WalkthroughOverlay
 BUILD		:=	build
 SOURCES		:=	source
 DATA		:=	data
-INCLUDES	:=	include libs/libtesla/include libs/json/include
+INCLUDES := include libs/libtesla/include libs/json/include libs/mupdf/include libs/stb
 # ROMFS		:=	romfs
 NO_ICON		:=  1
 

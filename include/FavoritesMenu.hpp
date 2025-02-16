@@ -1,8 +1,7 @@
+//FavoritesMenu.hpp
 #pragma once
-
 #include <tesla.hpp>
 #include <list>
-
 #include <FileSelectEntry.hpp>
 
 class FavoritesMenu : public tsl::Gui {

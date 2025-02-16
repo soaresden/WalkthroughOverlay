@@ -1,3 +1,4 @@
+//FileSelect.cpp
 #include <FileSelect.hpp>
 #include <filesystem>
 #include <FileSelectEntry.hpp>
@@ -29,9 +30,12 @@ FileSelect::FileSelect(std::string const &path)
             m_entries.push_back(new FileSelectDirEntry(absolutePath, isFavorite(absolutePath)));
         }
         else if (entry.is_regular_file()) {
-            if (utils::toLowerCase(entry.path().extension()) == ".txt")
+            std::string ext = utils::toLowerCase(entry.path().extension());
+            if (ext == ".txt" || ext == ".jpg" || ext == ".jpeg" || ext == ".png") {
                 m_entries.push_back(new FileSelectFileEntry(absolutePath, isFavorite(absolutePath)));
+            }
         }
+
     }
     std::sort(
         m_entries.begin(), m_entries.end(),

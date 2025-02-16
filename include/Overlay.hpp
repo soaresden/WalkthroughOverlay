@@ -1,11 +1,10 @@
+//Overlay.hpp
 #pragma once
-
 #include <tesla.hpp>
-
 #include <MainMenu.hpp>
 
 #ifndef TEXT_READER_VERSION
-#define TEXT_READER_VERSION "v1.2.1 by Storm"
+#define TEXT_READER_VERSION "v1.0 by Soaresden"
 #endif
 
 class TextReaderOverlay : public tsl::Overlay {

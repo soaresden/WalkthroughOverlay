@@ -1,9 +1,8 @@
+//TextReader.cpp
 #include <TextReader.hpp>
-
 #include <tesla.hpp>
 #include <string.h>
 #include <math.h>
-
 #include <Config.hpp>
 #include <Log.hpp>
 

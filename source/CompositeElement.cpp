@@ -1,3 +1,4 @@
+//CompositeElement.cpp
 #include <CompositeElement.hpp>
 
 void CompositeElement::addElement(tsl::elm::Element *elem, s16 offsetX, s16 offsetY, s16 width, s16 height) {

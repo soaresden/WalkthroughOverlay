@@ -1,12 +1,11 @@
+//TextReader.hpp
 #pragma once
-
 #include <tesla.hpp>
 #include <string>
 #include <vector>
 #include <set>
 #include <functional>
 #include <chrono>
-
 #include <Font.hpp>
 
 class TextReaderChunk {

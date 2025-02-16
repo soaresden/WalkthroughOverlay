@@ -1,5 +1,5 @@
+//FavoritesMenu.cpp
 #include <FavoritesMenu.hpp>
-
 #include <FileSelectEntry.hpp>
 #include <Config.hpp>
 #include <Utils.hpp>
