@@ -1,0 +1,9 @@
+# Fichiers de Visual Studio à ignorer
+.vs/
+*.suo
+*.user
+*.db
+*.sqlite
+*.log
+*.cache
+*.vscode/
