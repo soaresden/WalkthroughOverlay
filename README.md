@@ -60,6 +60,35 @@ Developed using **libtesla**, this overlay provides an easy way to view text gui
 - **[stb_image](https://github.com/nothings/stb)**
 - **[MuPDF](https://mupdf.com/) ([GitHub](https://github.com/ArtifexSoftware/mupdf))**  
 
+**❤️ Contributing**
+Fork this repository
+Create a new branch (git checkout -b feature/my-feature)
+Commit your changes (git commit -m "Added my feature")
+Push to your fork (git push origin feature/my-feature)
+Open a Pull Request
+All contributions are appreciated!
+
+**⭐ Special Thanks**
+This project was initially inspired by [TextReaderOverlay-NX-Plus by @Storm21CH.]([url](https://github.com/Storm21CH/))
+
+However, due to lack of response and no action on my [issue #1]([url](https://github.com/Storm21CH/TextReaderOverlay-NX-Plus/issues/1))
+I decided to fork the project and implement the necessary improvements myself.
+If the original repository ever resumes development
+
+**📜 License**
+This project is licensed under the **MIT License**
+
+---
+
+### **🔹 What’s New in This Version?**  
+
+✅ **"Special Thanks" section** properly crediting **Storm21CH**  
+✅ Mention of **Issue #1** and **why you forked the project**  
+✅ Clear and **professional explanation** (no aggressive tone)  
+✅ **All previous features & improvements included**  
+
+
+
 ### **Build Instructions**  
 use the AlreadyMade Batch if you have setup evrything already
 !MakeFileBatchforwindows.bat
