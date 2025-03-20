@@ -52,11 +52,12 @@ TextReader::TextReader(std::string const& path)
     m_chunkMid(0),
     m_loading(false),
     m_loaded(false),
-    m_font("sdmc:/switch/.overlays/TextReaderOverlay/fonts/font.ttf"),
     m_size(15),
     m_panx(0),
     m_debug(true)
 {
+    Log::log("Using Tesla's built-in font renderer");
+
     auto j = Config::read();
     auto resume = j["files"][m_path].find("resume");
     if (resume != j["files"][m_path].end()) {
@@ -70,6 +71,7 @@ TextReader::TextReader(std::string const& path)
     }
 }
 
+
 TextReader::~TextReader() {
     if (m_file) fclose(m_file);
 }
@@ -77,9 +79,10 @@ TextReader::~TextReader() {
 tsl::elm::Element* TextReader::createUI() {
     auto frame = new tsl::elm::OverlayFrame("", "");
     auto reader = new tsl::elm::CustomDrawer([this](tsl::gfx::Renderer* renderer, u16 x, u16 y, u16 w, u16 h) {
-        renderer->fillScreen(a({ 0x0, 0x0, 0x0, 0xD }));
+        // Fond noir légèrement transparent
+        renderer->fillScreen(renderer->a({ 0x0, 0x0, 0x0, 0xE }));
         if (!m_loading) {
-            renderer->drawString("Loading... May take a few seconds", false, 20, 50, 16, a(0xFFFF));
+            renderer->drawString("Loading... May take a few seconds", false, 20, 50, 16, renderer->a(0xFFFF));
             m_loading = true;
             return;
         }
@@ -107,7 +110,7 @@ tsl::elm::Element* TextReader::createUI() {
             return;
         }
         else if (!m_file) {
-            renderer->drawString("Could not open file", false, 20, 50, 16, a(0xFFFF));
+            renderer->drawString("Could not open file", false, 20, 50, 16, renderer->a(0xFFFF));
             return;
         }
 
@@ -118,7 +121,8 @@ tsl::elm::Element* TextReader::createUI() {
 
             if (chunk < m_chunks.size()) {
                 if (m_bookmarks.find(m_lineNum + i) != m_bookmarks.end()) {
-                    renderer->drawRect(0, i * m_size, tsl::cfg::FramebufferWidth, 1, a({ 0x6, 0x1, 0x1, 0xF }));
+                    // Utiliser une couleur plus visible pour les signets (rouge vif)
+                    renderer->drawRect(0, i * m_size, tsl::cfg::FramebufferWidth, 1, renderer->a({ 0xF, 0x0, 0x0, 0xF }));
                 }
                 printLn(
                     m_chunks[chunk].getLine(line),
@@ -130,26 +134,27 @@ tsl::elm::Element* TextReader::createUI() {
         }
 
         u32 progressY = m_lineNum * (tsl::cfg::FramebufferHeight - 20) / m_totalLines;
-        renderer->drawRect(0, progressY, 1, 20, a({ 0x8, 0x8, 0x8, 0xF }));
+        // Indicateur de position plus visible
+        renderer->drawRect(0, progressY, 2, 20, renderer->a({ 0xC, 0xC, 0xC, 0xF }));
 
         // Affichage des touches en bas de l'écran
         const u16 keybindY = tsl::cfg::FramebufferHeight - 73;
         const u16 lineHeight = 16;
         const u16 xOffset = 20;
 
-        //renderer->drawString("\uE081 Scroll", false, xOffset, keybindY, 15, a(0xFFFF));
-        renderer->drawString("\uE085 Scroll Faster", false, xOffset, keybindY + lineHeight, 15, a(0xFFFF));
-        renderer->drawString("\uE086 \uE091 \uE090 Scroll Even Faster", false, xOffset, keybindY + lineHeight * 2, 15, a(0xFFFF));
-        renderer->drawString("\uE086 \uE092 \uE093 Top/Bottom", false, xOffset, keybindY + lineHeight * 3, 15, a(0xFFFF));
+        //renderer->drawString("\uE081 Scroll", false, xOffset, keybindY, 15, renderer->a(0xFFFF));
+        renderer->drawString("\uE085 Scroll Faster", false, xOffset, keybindY + lineHeight, 15, renderer->a(0xFFFF));
+        renderer->drawString("\uE086 \uE091 \uE090 Scroll Even Faster", false, xOffset, keybindY + lineHeight * 2, 15, renderer->a(0xFFFF));
+        renderer->drawString("\uE086 \uE092 \uE093 Top/Bottom", false, xOffset, keybindY + lineHeight * 3, 15, renderer->a(0xFFFF));
 
         const u16 xOffset2 = tsl::cfg::FramebufferWidth / 2 + 20;
-        renderer->drawString("\uE082 \uE07D Font Size", false, xOffset2, keybindY, 15, a(0xFFFF));
-        renderer->drawString("\uE08B Line Start", false, xOffset2, keybindY + lineHeight * 2, 15, a(0xFFFF));
-        renderer->drawString("\uE0A3 Bookmark", false, xOffset2, keybindY + lineHeight * 3, 15, a(0xFFFF));
-        renderer->drawString("\uE0A4 \uE0A5 Nav Bookmarks", false, xOffset2, keybindY + lineHeight * 4, 15, a(0xFFFF));
+        renderer->drawString("\uE082 \uE07D Font Size", false, xOffset2, keybindY, 15, renderer->a(0xFFFF));
+        renderer->drawString("\uE08B Line Start", false, xOffset2, keybindY + lineHeight * 2, 15, renderer->a(0xFFFF));
+        renderer->drawString("\uE0A3 Bookmark", false, xOffset2, keybindY + lineHeight * 3, 15, renderer->a(0xFFFF));
+        renderer->drawString("\uE0A4 \uE0A5 Nav Bookmarks", false, xOffset2, keybindY + lineHeight * 4, 15, renderer->a(0xFFFF));
 
         if (m_debug)
-            renderer->drawString(std::to_string(m_fps).c_str(), false, tsl::cfg::FramebufferWidth - 20, 10, 10, a(0xFFFF));
+            renderer->drawString(std::to_string(m_fps).c_str(), false, tsl::cfg::FramebufferWidth - 20, 10, 10, renderer->a(0xFFFF));
         });
 
     frame->setContent(reader);
@@ -158,10 +163,10 @@ tsl::elm::Element* TextReader::createUI() {
 }
 
 void TextReader::printLn(std::string const& text, s32 x, s32 y, u32 fontSize, tsl::gfx::Renderer* renderer) const {
-    m_font.print(text.c_str(), x, y, fontSize, [renderer](s32 x, s32 y, u8 grad) {
-        renderer->setPixelBlendSrc(x, y, a({ 0xF, 0xF, 0xF, (u8)(grad >> 4) }));
-        });
+    // Utiliser directement drawString de Tesla avec la couleur blanche pleine opacité
+    renderer->drawString(text.c_str(), false, x, y, fontSize, renderer->a(0xFFFF));
 }
+
 
 bool TextReader::handleInput(u64 keysDown, u64 keysHeld, const HidTouchState& touchPos, HidAnalogStickState joyStickPosLeft, HidAnalogStickState joyStickPosRight) {
     if (keysHeld & HidNpadButton_ZR) {
@@ -287,7 +292,7 @@ void TextReader::toggleBookmark() {
     else
         m_bookmarks.erase(m_lineNum);
 
-    Config::update([this](json& j) {
+    Config::update([this](nlohmann::json& j) {
         j["files"][m_path]["bookmarks"] = m_bookmarks;
         });
 }
@@ -318,7 +323,7 @@ void TextReader::nextBookmark() {
 }
 
 void TextReader::close() const {
-    Config::update([this](json& j) {
+    Config::update([this](nlohmann::json& j) {
         j["files"][m_path]["resume"] = m_lineNum;
         });
     tsl::goBack();

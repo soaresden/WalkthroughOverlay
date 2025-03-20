@@ -1,14 +1,17 @@
 //Font.hpp
+
 #pragma once
+#ifndef FONT_HPP
+#define FONT_HPP
+
+#include "ft_stub.hpp"  // Utiliser le stub au lieu de FreeType
+
 #include <switch.h>
-#include <ft2build.h>
-#include FT_FREETYPE_H
-#include FT_CACHE_H
 #include <stdexcept>
 #include <functional>
-
 #include <Log.hpp>
 
+// Le reste du code reste identique
 class FTLibrary {
 public:
     FTLibrary() {
@@ -24,9 +27,12 @@ private:
     FT_Library m_library;
 };
 
+
+
+
 class FTCManager {
 public:
-    FTCManager(FTLibrary const &library, const char* fontPath) {
+    FTCManager(FTLibrary const& library, const char* fontPath) {
         if (FTC_Manager_New(library, 0, 0, 0, faceRequester, (void*)fontPath, &m_manager))
             throw std::runtime_error("FTC_Manager_New failed");
     }
@@ -36,7 +42,7 @@ public:
     operator FTC_Manager() const { return m_manager; }
 
 protected:
-    static FT_Error faceRequester(FTC_FaceID faceId, FT_Library library, FT_Pointer reqData, FT_Face *face) {
+    static FT_Error faceRequester(FTC_FaceID faceId, FT_Library library, FT_Pointer reqData, FT_Face* face) {
         FT_Error err = FT_New_Face(library, (const char*)reqData, 0, face);
         if (err == FT_Err_Unknown_File_Format)
             Log::log("FT_New_Face failed: FT_Err_Unknown_File_Format");
@@ -49,6 +55,7 @@ private:
     FTC_Manager m_manager;
 };
 
+// Modifiez Font.hpp comme suit:
 class Font {
 public:
     Font(const char* path) : m_cacheManager(m_library, path)
@@ -59,7 +66,8 @@ public:
             throw std::runtime_error("FTC_CMapCache_New failed");
     }
 
-    void print(const char* str, s32 x, s32 y, u32 fontSize, std::function<void(s32 x, s32 y, u8 grad)> const &setPixel) const;
+    // Juste une déclaration, pas d'implémentation
+    void print(const char* str, s32 x, s32 y, u32 fontSize, std::function<void(s32 x, s32 y, u8 grad)> const& setPixel) const;
 
 private:
     FTLibrary m_library;
@@ -67,3 +75,5 @@ private:
     FTC_SBitCache m_sbitCache;
     FTC_CMapCache m_cmapCache;
 };
+
+#endif // FONT_HPP

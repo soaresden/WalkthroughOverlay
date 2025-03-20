@@ -31,7 +31,7 @@ FileSelect::FileSelect(std::string const &path)
         }
         else if (entry.is_regular_file()) {
             std::string ext = utils::toLowerCase(entry.path().extension());
-            if (ext == ".txt" || ext == ".jpg" || ext == ".jpeg" || ext == ".png") {
+            if (ext == ".png" || ext == ".jpg" || ext == ".txt") {
                 m_entries.push_back(new FileSelectFileEntry(absolutePath, isFavorite(absolutePath)));
             }
         }

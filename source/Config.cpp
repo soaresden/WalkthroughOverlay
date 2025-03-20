@@ -1,35 +1,46 @@
-//Config.cpp
-#include <Config.hpp>
-
+// Config.cpp
+#include "Config.hpp"
 #include <fstream>
+#include <filesystem>
 
-const char* Config::FILE_PATH = "sdmc:/switch/.overlays/TextReaderOverlay/config.json";
+const char* Config::FILE_PATH = "/switch/WalkthroughOverlay/config.json";
 
-json Config::read() {
-    std::fstream fs(FILE_PATH, std::fstream::in);
-    if (fs.fail()) {
+nlohmann::json Config::read() {
+    try {
+        std::ifstream file(FILE_PATH);
+        if (!file.is_open()) {
+            // Si le fichier n'existe pas, initialiser une nouvelle configuration
+            return initialize();
+        }
+        nlohmann::json config;
+        file >> config;
+        return config;
+    }
+    catch (...) {
+        // En cas d'erreur, initialiser une nouvelle configuration
         return initialize();
     }
-
-    json j = json::parse(fs, nullptr, false);
-    if (!j.is_discarded())
-        return j;
-
-    return initialize();
 }
 
-void Config::update(std::function<void(json &)> const &updater) {
-    json j = read();
-
-    updater(j);
-
-    std::fstream fs(FILE_PATH, std::fstream::out);
-    fs << j.dump(2);
+void Config::update(std::function<void(nlohmann::json&)> const& updater) {
+    nlohmann::json config = read();
+    updater(config);
+    // Créer le répertoire si nécessaire
+    std::filesystem::create_directories(std::filesystem::path(FILE_PATH).parent_path());
+    // Écrire la configuration mise à jour
+    std::ofstream file(FILE_PATH);
+    file << config.dump(4);  // Indentation de 4 espaces
 }
 
-json Config::initialize() {
-    std::fstream fs(FILE_PATH, std::fstream::out | std::fstream::trunc);
-    json j = json::object();
-    fs << j;
-    return j;
+nlohmann::json Config::initialize() {
+    nlohmann::json defaultConfig;
+    // Configuration par défaut
+    defaultConfig["version"] = "1.0.0";
+    defaultConfig["favorites"] = nlohmann::json::array();
+    // Créer le répertoire si nécessaire
+    std::filesystem::create_directories(std::filesystem::path(FILE_PATH).parent_path());
+    // Écrire la configuration par défaut
+    std::ofstream file(FILE_PATH);
+    file << defaultConfig.dump(4);  // Indentation de 4 espaces
+    return defaultConfig;
 }

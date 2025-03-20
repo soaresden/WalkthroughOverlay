@@ -1,12 +1,11 @@
-﻿//FileSelectEntry.cpp
+﻿// FileSelectEntry.cpp
 #include "FileSelectEntry.hpp"
-#include "pdfviewer.hpp"
-#include <Config.hpp>
-#include "imageviewer.hpp"  // Ensure image handling is included
+#include "Config.hpp"
+#include <algorithm>
 
 void FileSelectEntry::toggleFavorite() {
     m_favorite = !m_favorite;
-    Config::update([this](json& j) {
+    Config::update([this](nlohmann::json& j) {  // Utilisez le nom complet nlohmann::json
         if (!j["favorites"].is_array()) {
             j["favorites"] = {};
         }
@@ -23,69 +22,54 @@ void FileSelectEntry::toggleFavorite() {
 }
 
 bool FileSelectEntry::operator<(FileSelectEntry const& other) const {
-    if (ordering() < other.ordering())
-        return true;
-    else if (other.ordering() < ordering())
-        return false;
-    else
-        return utils::compareIgnoreCase(m_path, other.m_path);
-}
-
-FileType FileSelectEntry::getFileType() const {
-    std::string extension = getPathInternal().extension().string();
-    std::transform(extension.begin(), extension.end(), extension.begin(), ::tolower);
-
-    // Images
-    if (extension == ".jpg" || extension == ".jpeg" ||
-        extension == ".png" || extension == ".bmp" ||
-        extension == ".gif" || extension == ".tga") {
-        return FileType::IMAGE;
+    // Different types of entries
+    if (ordering() != other.ordering()) {
+        return ordering() < other.ordering();
     }
 
-    // PDF
-    if (extension == ".pdf") {
-        return FileType::PDF;
-    }
-
-    // Text files
-    if (extension == ".txt" || extension == ".log" ||
-        extension == ".ini" || extension == ".cfg" ||
-        extension == ".json" || extension == ".xml" ||
-        extension == ".html" || extension == ".cpp" ||
-        extension == ".h" || extension == ".hpp") {
-        return FileType::TEXT;
-    }
-
-    return FileType::UNKNOWN;
-}
-
-void FileSelectFileEntry::select() {
-    FileType type = getFileType();
-
-    switch (type) {
-    case FileType::TEXT:
-        tsl::changeTo<TextReader>(getPath());
-        break;
-
-    case FileType::IMAGE:
-        tsl::changeTo<ImageViewer>(getPath());
-        break;
-
-    case FileType::PDF:
-        // TODO: Implement PDF viewer
-        break;
-
-    case FileType::UNKNOWN:
-        // Default to opening as a text file
-        tsl::changeTo<TextReader>(getPath());
-        break;
-    }
+    // Both entries of the same type
+    return getName() < other.getName();
 }
 
 int FileSelectDirEntry::ordering() const {
-    return 1;  // Prioritize directories
+    return 0;
 }
 
 int FileSelectFileEntry::ordering() const {
-    return 2;  // Prioritize files
+    return 1;
+}
+
+FileType FileSelectEntry::getFileType() const {
+    // Utiliser m_path au lieu de getPathInternal()
+    std::string extension = m_path.extension().string();
+
+    // Convertir l'extension en minuscules pour une comparaison insensible à la casse
+    std::transform(extension.begin(), extension.end(), extension.begin(), ::tolower);
+
+    if (extension == ".jpg" || extension == ".jpeg" || extension == ".png" || extension == ".bmp" || extension == ".gif") {
+        return FileType::IMAGE;
+    }
+    else if (extension == ".txt" || extension == ".md" || extension == ".ini") {
+        return FileType::TEXT;
+    }
+    else {
+        return FileType::UNKNOWN;
+    }
+}
+
+void FileSelectFileEntry::select() {
+    // Sélectionner l'action en fonction du type de fichier
+    FileType type = getFileType();
+
+    switch (type) {
+    case FileType::IMAGE:
+        tsl::changeTo<ImageViewer>(getPath());
+        break;
+    case FileType::TEXT:
+        tsl::changeTo<TextReader>(getPath());
+        break;
+    default:
+        // Type de fichier non pris en charge
+        break;
+    }
 }

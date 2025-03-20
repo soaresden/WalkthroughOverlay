@@ -1,19 +1,14 @@
-//Config.hpp
+// Config.hpp
 #pragma once
-#include <json.hpp>
+#include "../libs/json/json.hpp"
 #include <functional>
-
-using nlohmann::json;
 
 class Config {
 public:
-    static json read();
-    static void update(std::function<void(json &)> const &updater);
-
+    static nlohmann::json read();
+    static void update(std::function<void(nlohmann::json&)> const& updater);
+    static nlohmann::json initialize();
 private:
-    static json initialize();
-
-private:
-    Config() {}
+    Config() = default;
     static const char* FILE_PATH;
 };

@@ -180,27 +180,11 @@ MainMenu.o: \
  C:/Users/Denis/source/repos/soaresden/WalkthroughOverlay/include/FavoritesMenu.hpp \
  C:/Users/Denis/source/repos/soaresden/WalkthroughOverlay/include/FileSelectEntry.hpp \
  C:/Users/Denis/source/repos/soaresden/WalkthroughOverlay/include/TextReader.hpp \
- C:/Users/Denis/source/repos/soaresden/WalkthroughOverlay/include/Font.hpp \
- D:/devkitProSwitch/portlibs/switch/include/freetype2/ft2build.h \
- D:/devkitProSwitch/portlibs/switch/include/freetype2/freetype/config/ftheader.h \
- D:/devkitProSwitch/portlibs/switch/include/freetype2/freetype/freetype.h \
- D:/devkitProSwitch/portlibs/switch/include/freetype2/freetype/config/ftconfig.h \
- D:/devkitProSwitch/portlibs/switch/include/freetype2/freetype/config/ftoption.h \
- D:/devkitProSwitch/portlibs/switch/include/freetype2/freetype/config/ftstdlib.h \
- D:/devkitProSwitch/portlibs/switch/include/freetype2/freetype/config/integer-types.h \
- D:/devkitProSwitch/portlibs/switch/include/freetype2/freetype/config/public-macros.h \
- D:/devkitProSwitch/portlibs/switch/include/freetype2/freetype/config/mac-support.h \
- D:/devkitProSwitch/portlibs/switch/include/freetype2/freetype/fttypes.h \
- D:/devkitProSwitch/portlibs/switch/include/freetype2/freetype/ftsystem.h \
- D:/devkitProSwitch/portlibs/switch/include/freetype2/freetype/ftimage.h \
- D:/devkitProSwitch/portlibs/switch/include/freetype2/freetype/fterrors.h \
- D:/devkitProSwitch/portlibs/switch/include/freetype2/freetype/ftmoderr.h \
- D:/devkitProSwitch/portlibs/switch/include/freetype2/freetype/fterrdef.h \
- D:/devkitProSwitch/portlibs/switch/include/freetype2/freetype/ftcache.h \
- D:/devkitProSwitch/portlibs/switch/include/freetype2/freetype/ftglyph.h \
- C:/Users/Denis/source/repos/soaresden/WalkthroughOverlay/include/Log.hpp \
  C:/Users/Denis/source/repos/soaresden/WalkthroughOverlay/include/Utils.hpp \
- C:/Users/Denis/source/repos/soaresden/WalkthroughOverlay/include/imageviewer.hpp \
+ C:/Users/Denis/source/repos/soaresden/WalkthroughOverlay/include/ImageViewer.hpp \
+ C:/Users/Denis/source/repos/soaresden/WalkthroughOverlay/include/StbImageElement.hpp \
+ C:/Users/Denis/source/repos/soaresden/WalkthroughOverlay/include/Config.hpp \
+ C:/Users/Denis/source/repos/soaresden/WalkthroughOverlay/libs/json/json.hpp \
  C:/Users/Denis/source/repos/soaresden/WalkthroughOverlay/include/HelpMenu.hpp \
  C:/Users/Denis/source/repos/soaresden/WalkthroughOverlay/include/LogMenu.hpp
 C:/Users/Denis/source/repos/soaresden/WalkthroughOverlay/include/MainMenu.hpp:
@@ -383,26 +367,10 @@ C:/Users/Denis/source/repos/soaresden/WalkthroughOverlay/include/FileSelect.hpp:
 C:/Users/Denis/source/repos/soaresden/WalkthroughOverlay/include/FavoritesMenu.hpp:
 C:/Users/Denis/source/repos/soaresden/WalkthroughOverlay/include/FileSelectEntry.hpp:
 C:/Users/Denis/source/repos/soaresden/WalkthroughOverlay/include/TextReader.hpp:
-C:/Users/Denis/source/repos/soaresden/WalkthroughOverlay/include/Font.hpp:
-D:/devkitProSwitch/portlibs/switch/include/freetype2/ft2build.h:
-D:/devkitProSwitch/portlibs/switch/include/freetype2/freetype/config/ftheader.h:
-D:/devkitProSwitch/portlibs/switch/include/freetype2/freetype/freetype.h:
-D:/devkitProSwitch/portlibs/switch/include/freetype2/freetype/config/ftconfig.h:
-D:/devkitProSwitch/portlibs/switch/include/freetype2/freetype/config/ftoption.h:
-D:/devkitProSwitch/portlibs/switch/include/freetype2/freetype/config/ftstdlib.h:
-D:/devkitProSwitch/portlibs/switch/include/freetype2/freetype/config/integer-types.h:
-D:/devkitProSwitch/portlibs/switch/include/freetype2/freetype/config/public-macros.h:
-D:/devkitProSwitch/portlibs/switch/include/freetype2/freetype/config/mac-support.h:
-D:/devkitProSwitch/portlibs/switch/include/freetype2/freetype/fttypes.h:
-D:/devkitProSwitch/portlibs/switch/include/freetype2/freetype/ftsystem.h:
-D:/devkitProSwitch/portlibs/switch/include/freetype2/freetype/ftimage.h:
-D:/devkitProSwitch/portlibs/switch/include/freetype2/freetype/fterrors.h:
-D:/devkitProSwitch/portlibs/switch/include/freetype2/freetype/ftmoderr.h:
-D:/devkitProSwitch/portlibs/switch/include/freetype2/freetype/fterrdef.h:
-D:/devkitProSwitch/portlibs/switch/include/freetype2/freetype/ftcache.h:
-D:/devkitProSwitch/portlibs/switch/include/freetype2/freetype/ftglyph.h:
-C:/Users/Denis/source/repos/soaresden/WalkthroughOverlay/include/Log.hpp:
 C:/Users/Denis/source/repos/soaresden/WalkthroughOverlay/include/Utils.hpp:
-C:/Users/Denis/source/repos/soaresden/WalkthroughOverlay/include/imageviewer.hpp:
+C:/Users/Denis/source/repos/soaresden/WalkthroughOverlay/include/ImageViewer.hpp:
+C:/Users/Denis/source/repos/soaresden/WalkthroughOverlay/include/StbImageElement.hpp:
+C:/Users/Denis/source/repos/soaresden/WalkthroughOverlay/include/Config.hpp:
+C:/Users/Denis/source/repos/soaresden/WalkthroughOverlay/libs/json/json.hpp:
 C:/Users/Denis/source/repos/soaresden/WalkthroughOverlay/include/HelpMenu.hpp:
 C:/Users/Denis/source/repos/soaresden/WalkthroughOverlay/include/LogMenu.hpp:

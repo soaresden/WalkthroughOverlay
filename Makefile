@@ -1,3 +1,4 @@
+#MAKEFILE
 #---------------------------------------------------------------------------------
 .SUFFIXES:
 #---------------------------------------------------------------------------------
@@ -37,14 +38,15 @@ include $(DEVKITPRO)/libnx/switch_rules
 #   of a homebrew executable (.nro). This is intended to be used for sysmodules.
 #   NACP building is skipped as well.
 #---------------------------------------------------------------------------------
-APP_TITLE	:=	WalkthroughOverlay
+APP_TITLE	:=	!WalkthroughOverlay
 APP_VERSION	:=	1.0
 APP_AUTHOR  :=  Soaresden
 TARGET		:=	WalkthroughOverlay
 BUILD		:=	build
 SOURCES		:=	source
 DATA		:=	data
-INCLUDES    := include libs/libtesla/include libs/json/include libs/mupdf/include libs/stb
+INCLUDES	:=  include libs/libtesla/include libs/json libs/stb
+
 # ROMFS		:=	romfs
 NO_ICON		:=  1
 
@@ -56,17 +58,18 @@ RELEASE_ZIP		:= $(TARGET)-$(APP_VERSION).zip
 ARCH	:=	-march=armv8-a+crc+crypto -mtune=cortex-a57 -mtp=soft -fPIE
 
 CFLAGS	:=	-g -Wall -O2 -ffunction-sections \
-			$(ARCH) $(DEFINES) \
-			`freetype-config --cflags`
+			$(ARCH) $(DEFINES)
 
 CFLAGS	+=	$(INCLUDE) -D__SWITCH__
+CFLAGS	+=	-DFT_SIZEOF_INT=4 -DFT_SIZEOF_LONG=4 -DFT_CHAR_BIT=8	
+
 
 CXXFLAGS	:= $(CFLAGS) -std=c++17
 
 ASFLAGS	:=	-g $(ARCH)
 LDFLAGS	=	-specs=$(DEVKITPRO)/libnx/switch.specs -g $(ARCH) -Wl,-Map,$(notdir $*.map)
 
-LIBS	:=	-lnx `freetype-config --libs --static`
+LIBS	:=	-lnx -lm -lz -lpng  `freetype-config --libs --static`
 
 #---------------------------------------------------------------------------------
 # list of directories containing libraries, this must be the top level containing
@@ -216,8 +219,8 @@ release:	$(RELEASE_ZIP)
 
 $(RELEASE_ZIP): $(OUTPUT).ovl
 	rm -rf sdfiles/
-	mkdir -p sdfiles/switch/.overlays/TextReaderOverlay/
+	mkdir -p sdfiles/switch/.overlays/WalkthroughOverlay/
 	cp $(OUTPUT).ovl sdfiles/switch/.overlays/
-	cp -r package/* sdfiles/switch/.overlays/TextReaderOverlay/
+	cp -r package/* sdfiles/switch/.overlays/WalkthroughOverlay/
 	cd sdfiles/ && zip -r ../$(RELEASE_ZIP) * && cd ..
 	rm -rf sdfiles/

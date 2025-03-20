@@ -1,32 +1,33 @@
-﻿//FileSelectEntry.hpp
+﻿//fileSelectEntry.hpp
+
 #ifndef FILE_SELECT_ENTRY_HPP
 #define FILE_SELECT_ENTRY_HPP
-
+#pragma once
 #include <tesla.hpp>
 #include <string>
 #include <filesystem>
 #include <FileSelect.hpp>
 #include <TextReader.hpp>
 #include <Utils.hpp>
-#include "imageviewer.hpp"
-
-namespace fs = std::filesystem;
+#include "ImageViewer.hpp"
 
 enum class FileType {
+    IMAGE,
     TEXT,
-    IMAGE, // ✅ Ensure Images support is included
-    PDF,  // ✅ Ensure PDF support is included
     UNKNOWN
 };
 
 class FileSelectEntry {
 public:
     FileSelectEntry(std::string const& path, bool favorite)
-        : m_path(path), m_favorite(favorite) {}
-
+        : m_path(std::filesystem::path(path)), m_favorite(favorite) {
+    }
     virtual ~FileSelectEntry() {}
 
-    std::string getPath() const { return getPathInternal(); }
+    std::string getPath() const {
+        return m_path.string();
+    }
+
     std::string label() const {
         return (isFavorite() ? "\u2605 " : "") + getName();
     }
@@ -41,21 +42,21 @@ public:
     FileType getFileType() const;
 
 protected:
-    fs::path getPathInternal() const { return m_path; }
     virtual int ordering() const = 0;
+    std::filesystem::path m_path;
 
 private:
-    fs::path m_path;
     bool m_favorite;
 };
 
 class FileSelectDirEntry : public FileSelectEntry {
 public:
     FileSelectDirEntry(std::string const& path, bool favorite)
-        : FileSelectEntry(path, favorite) {}
+        : FileSelectEntry(path, favorite) {
+    }
 
-    std::string getName() const {
-        return getPathInternal().parent_path().filename().string() + "/";
+    std::string getName() const override {
+        return m_path.parent_path().filename().string() + "/";
     }
 
     void select() override {
@@ -69,10 +70,11 @@ protected:
 class FileSelectFileEntry : public FileSelectEntry {
 public:
     FileSelectFileEntry(std::string const& path, bool favorite)
-        : FileSelectEntry(path, favorite) {}
+        : FileSelectEntry(path, favorite) {
+    }
 
-    std::string getName() const {
-        return getPathInternal().filename().string();
+    std::string getName() const override {
+        return m_path.filename().string();
     }
 
     void select() override;

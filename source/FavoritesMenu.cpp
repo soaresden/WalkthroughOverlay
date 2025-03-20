@@ -1,57 +1,78 @@
-//FavoritesMenu.cpp
-#include <FavoritesMenu.hpp>
-#include <FileSelectEntry.hpp>
-#include <Config.hpp>
-#include <Utils.hpp>
+// FavoritesMenu.cpp
+#include "FavoritesMenu.hpp"
+#include "Config.hpp"
+#include "Utils.hpp"
+
+FavoritesMenuFrame::FavoritesMenuFrame(std::list<FileSelectEntry*>& entries)
+    : tsl::elm::OverlayFrame("Favorites", ""), // Initialiser correctement la classe parent avec titre et sous-titre
+    m_entries(entries) {
+}
+
+void FavoritesMenuFrame::draw(tsl::gfx::Renderer* renderer) {
+    // Appeler d'abord la méthode parente pour dessiner le cadre de base
+    tsl::elm::OverlayFrame::draw(renderer);
+
+    // Ajouter nos éléments personnalisés
+    renderer->fillScreen(renderer->a({ 0x0, 0x0, 0x0, 0xD }));
+    renderer->drawString("Favorites", false, 20, 50, 30, renderer->a(0xFFFF));
+    renderer->drawRect(15, 720 - 73, tsl::cfg::FramebufferWidth - 30, 1, renderer->a(0xFFFF));
+    renderer->drawString("\uE0E3  Favorite", false, 30, 693, 23, renderer->a(0xFFFF));
+}
 
 FavoritesMenu::FavoritesMenu() {
+    // Utiliser la méthode statique de Config
     auto favorites = Config::read()["favorites"];
+
     if (!favorites.is_array()) {
         favorites = {};
     }
 
-    for (auto &val : favorites) {
+    for (auto& val : favorites) {
         std::string path = val;
         if (utils::endsWith(path, "/"))
             m_entries.push_back(new FileSelectDirEntry(path, true));
         else
             m_entries.push_back(new FileSelectFileEntry(path, true));
     }
-    m_entries.sort([](FileSelectEntry *a, FileSelectEntry *b) { return *a < *b; });
+
+    m_entries.sort([](FileSelectEntry* a, FileSelectEntry* b) { return *a < *b; });
 }
 
 FavoritesMenu::~FavoritesMenu() {
-    for (auto it = m_entries.begin(); it != m_entries.end(); ++it) {
-        delete *it;
+    for (auto* entry : m_entries) {
+        delete entry;
     }
 }
 
 tsl::elm::Element* FavoritesMenu::createUI() {
-    auto frame = new FavoritesMenuFrame();
+    auto frame = new FavoritesMenuFrame(m_entries);
 
     if (m_entries.empty()) {
-        frame->setContent(new tsl::elm::CustomDrawer([this](tsl::gfx::Renderer *renderer, u16 x, u16 y, u16 w, u16 h) {
-            renderer->drawString("No favorites added yet", false, 20, 100, 16, a(0xFFFF));
-        }));
+        auto emptyListDrawer = new tsl::elm::CustomDrawer([](tsl::gfx::Renderer* renderer, s32 x, s32 y, s32 w, s32 h) {
+            renderer->drawString("No favorites added yet", false, 20, 100, 16, renderer->a(0xFFFF));
+            });
+
+        frame->setContent(emptyListDrawer);
         return frame;
     }
 
     auto list = new tsl::elm::List();
 
-    for (auto it = m_entries.begin(); it != m_entries.end(); ++it) {
-        auto item = new tsl::elm::ListItem((*it)->label());
-        item->setClickListener([it, item](s64 keys) {
+    for (auto* entry : m_entries) {
+        auto item = new tsl::elm::ListItem(entry->label());
+        item->setClickListener([entry, item](s64 keys) {
             if (keys & HidNpadButton_A) {
-                (*it)->select();
+                entry->select();
                 return true;
             }
             if (keys & HidNpadButton_Y) {
-                (*it)->toggleFavorite();
-                item->setText((*it)->label());
+                entry->toggleFavorite();
+                item->setText(entry->label());
                 return true;
             }
             return false;
-        });
+            });
+
         list->addItem(item);
     }
 
@@ -59,14 +80,4 @@ tsl::elm::Element* FavoritesMenu::createUI() {
     frame->setContent(list);
 
     return frame;
-}
-
-void FavoritesMenuFrame::draw(tsl::gfx::Renderer *renderer) {
-    renderer->fillScreen(a({ 0x0, 0x0, 0x0, 0xD }));
-    renderer->drawString("Favorites", false, 20, 50, 30, a(0xFFFF));
-    renderer->drawRect(15, 720 - 73, tsl::cfg::FramebufferWidth - 30, 1, a(0xFFFF));
-    renderer->drawString("\uE0E3  Favorite", false, 30, 693, 23, a(0xFFFF));
-
-    if (this->m_contentElement != nullptr)
-        this->m_contentElement->frame(renderer);
 }

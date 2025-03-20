@@ -1,6 +1,6 @@
-imageviewer.o: \
- C:/Users/Denis/source/repos/soaresden/WalkthroughOverlay/source/imageviewer.cpp \
- C:/Users/Denis/source/repos/soaresden/WalkthroughOverlay/include/imageviewer.hpp \
+ImageViewer.o: \
+ C:/Users/Denis/source/repos/soaresden/WalkthroughOverlay/source/ImageViewer.cpp \
+ C:/Users/Denis/source/repos/soaresden/WalkthroughOverlay/include/ImageViewer.hpp \
  C:/Users/Denis/source/repos/soaresden/WalkthroughOverlay/libs/libtesla/include/tesla.hpp \
  D:/devkitProSwitch/libnx/include/switch.h \
  D:/devkitProSwitch/libnx/include/switch/types.h \
@@ -175,8 +175,8 @@ imageviewer.o: \
  D:/devkitProSwitch/libnx/include/switch/crypto/hmac.h \
  D:/devkitProSwitch/libnx/include/switch/crypto/crc.h \
  C:/Users/Denis/source/repos/soaresden/WalkthroughOverlay/libs/libtesla/include/stb_truetype.h \
- C:/Users/Denis/source/repos/soaresden/WalkthroughOverlay/libs/stb/stb_image.h
-C:/Users/Denis/source/repos/soaresden/WalkthroughOverlay/include/imageviewer.hpp:
+ C:/Users/Denis/source/repos/soaresden/WalkthroughOverlay/include/StbImageElement.hpp
+C:/Users/Denis/source/repos/soaresden/WalkthroughOverlay/include/ImageViewer.hpp:
 C:/Users/Denis/source/repos/soaresden/WalkthroughOverlay/libs/libtesla/include/tesla.hpp:
 D:/devkitProSwitch/libnx/include/switch.h:
 D:/devkitProSwitch/libnx/include/switch/types.h:
@@ -351,4 +351,4 @@ D:/devkitProSwitch/libnx/include/switch/crypto/sha1.h:
 D:/devkitProSwitch/libnx/include/switch/crypto/hmac.h:
 D:/devkitProSwitch/libnx/include/switch/crypto/crc.h:
 C:/Users/Denis/source/repos/soaresden/WalkthroughOverlay/libs/libtesla/include/stb_truetype.h:
-C:/Users/Denis/source/repos/soaresden/WalkthroughOverlay/libs/stb/stb_image.h:
+C:/Users/Denis/source/repos/soaresden/WalkthroughOverlay/include/StbImageElement.hpp:
