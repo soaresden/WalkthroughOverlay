@@ -2,14 +2,12 @@
 .SUFFIXES:
 #---------------------------------------------------------------------------------
 
-
 ifeq ($(strip $(DEVKITPRO)),)
 $(error "Please set DEVKITPRO in your environment. export DEVKITPRO=<path to>/devkitpro")
 endif
 
 TOPDIR ?= $(CURDIR)
 include $(DEVKITPRO)/libnx/switch_rules
-
 
 #---------------------------------------------------------------------------------
 # TARGET is the name of the output
@@ -27,121 +25,52 @@ include $(DEVKITPRO)/libnx/switch_rules
 # APP_TITLEID is the titleID of the app stored in the .nacp file (Optional)
 # ICON is the filename of the icon (.jpg), relative to the project folder.
 #   If not set, it attempts to use one of the following (in this order):
-#	 - <Project name>.jpg
-#	 - icon.jpg
-#	 - <libnx folder>/default_icon.jpg
+#     - <Project name>.jpg
+#     - icon.jpg
+#     - <libnx folder>/default_icon.jpg
 #
 # CONFIG_JSON is the filename of the NPDM config file (.json), relative to the project folder.
 #   If not set, it attempts to use one of the following (in this order):
-#	 - <Project name>.json
-#	 - config.json
+#     - <Project name>.json
+#     - config.json
 #   If a JSON file is provided or autodetected, an ExeFS PFS0 (.nsp) is built instead
 #   of a homebrew executable (.nro). This is intended to be used for sysmodules.
-#   NACP building is skipped as well. #lib/Atmosphere-libs/libexosphere/source/pmic
+#   NACP building is skipped as well.
 #---------------------------------------------------------------------------------
-APP_TITLE := WalkthroughOverlay
-APP_AUTHOR := Soaresden
-APP_VERSION := 2.0.0
-TARGET := WalkthroughOverlay
-BUILD		:= build
-SOURCES := source
-INCLUDES := include
-NO_ICON		:= 1
 
-# This location should reflect where you place the libultrahand directory (lib can vary between projects).
-include ${TOPDIR}/lib/libultrahand/ultrahand.mk
+APP_TITLE			:=		Tesla Example
+APP_VERSION 	:= 		1.3.0
 
+TARGET		:=	$(notdir $(CURDIR))
+BUILD		:=	build
+SOURCES		:=	source
+DATA		:=	data
+INCLUDES	:=	../include
+
+NO_ICON		:=  1
 
 #---------------------------------------------------------------------------------
 # options for code generation
 #---------------------------------------------------------------------------------
-ARCH := -march=armv8-a+simd+crc+crypto -mtune=cortex-a57 -mtp=soft -fPIE
+ARCH	:=	-march=armv8-a+crc+crypto -mtune=cortex-a57 -mtp=soft -fPIE
 
-CFLAGS := -g -Wall -O2 -ffunction-sections -fdata-sections -flto \
-          -fuse-linker-plugin -fomit-frame-pointer -finline-small-functions \
-          -fno-strict-aliasing -frename-registers -falign-functions=16 \
-          $(ARCH) $(DEFINES)
+CFLAGS	:=	-g -Wall -O2 -ffunction-sections \
+			$(ARCH) $(DEFINES)
 
-CFLAGS += $(INCLUDE) -D__SWITCH__ -DAPP_VERSION="\"$(APP_VERSION)\"" -D_FORTIFY_SOURCE=2
+CFLAGS	+=	$(INCLUDE) -D__SWITCH__
 
+CXXFLAGS	:= $(CFLAGS) -fno-exceptions -std=c++20
 
-#---------------------------------------------------------------------------------
-# options for libultrahand
-#---------------------------------------------------------------------------------
+ASFLAGS	:=	-g $(ARCH)
+LDFLAGS	=	-specs=$(DEVKITPRO)/libnx/switch.specs -g $(ARCH) -Wl,-Map,$(notdir $*.map)
 
-# Overlay UI config path
-UI_OVERRIDE_PATH := /config/WalkthroughOverlay/
-CFLAGS += -DUI_OVERRIDE_PATH="\"$(UI_OVERRIDE_PATH)\""
-
-# Enable Widget
-#CFLAGS += -DUSING_WIDGET_DIRECTIVE=1
-
-# Exception wrap utilization (for smaller compilation size)
-CFLAGS += -DUSE_EXCEPTION_WRAP=1
-
-# Requires USE_EXCEPTION_WRAP and inclusion of exception_wrap.hpp in main
-LDFLAGS += -Wl,-wrap,__cxa_throw \
-           -Wl,-wrap,_Unwind_Resume \
-           -Wl,-wrap,__gxx_personality_v0
-
-
-#---------------------------------------------------------------------------------
-
-
-CXXFLAGS := $(CFLAGS) -std=c++26 -Wno-dangling-else -ffast-math -fno-unwind-tables -fno-asynchronous-unwind-tables 
-
-ASFLAGS := $(ARCH)
-LDFLAGS += -specs=$(DEVKITPRO)/libnx/switch.specs $(ARCH) -Wl,-Map,$(notdir $*.map)
-
-# Essential libraries for Ultrahand Overlay
-LIBS := -lpng -ljpeg -lcurl -lz -lmbedtls -lmbedx509 -lmbedcrypto -lnx
-
-CXXFLAGS += -fno-exceptions -ffunction-sections -fdata-sections -fno-rtti
-LDFLAGS += -Wl,--as-needed -Wl,--gc-sections
-
-
-
-# For Ensuring Parallel LTRANS Jobs w/ GCC, make -j N (for convenience)
-# ------------------------------------------------------------
-# Detect how many logical CPUs are available, cross-platform
-# ------------------------------------------------------------
-NPROC := $(shell \
-	getconf _NPROCESSORS_ONLN 2>/dev/null || \
-	nproc 2>/dev/null || \
-	sysctl -n hw.ncpu 2>/dev/null || \
-	echo 1)
-
-# Fallback if detection somehow failed
-ifeq ($(strip $(NPROC)),)
-	NPROC := 1
-endif
-
-# ------------------------------------------------------------
-# Set parallelism flags only if user didn't pass -j manually
-# ------------------------------------------------------------
-ifeq (,$(filter -j -j%,$(MAKEFLAGS)))
-	MAKEFLAGS += -j$(NPROC)
-endif
-
-# ------------------------------------------------------------
-# Enable link-time optimization with parallel jobs
-# ------------------------------------------------------------
-CXXFLAGS += -flto=$(NPROC)
-LDFLAGS  += -flto=$(NPROC)
-
-
-# Add -z notext to LDFLAGS to allow dynamic relocations in read-only segments
-#LDFLAGS += -z notext
-
-# For Ensuring Parallel LTRANS Jobs w/ Clang, make -j6
-#CXXFLAGS += -flto -flto-jobs=6
-#LDFLAGS += -flto-jobs=6
+LIBS	:= -lnx
 
 #---------------------------------------------------------------------------------
 # list of directories containing libraries, this must be the top level containing
 # include and lib
 #---------------------------------------------------------------------------------
-LIBDIRS := $(PORTLIBS) $(LIBNX)
+LIBDIRS	:= $(PORTLIBS) $(LIBNX)
 
 
 #---------------------------------------------------------------------------------
@@ -151,43 +80,43 @@ LIBDIRS := $(PORTLIBS) $(LIBNX)
 ifneq ($(BUILD),$(notdir $(CURDIR)))
 #---------------------------------------------------------------------------------
 
-export OUTPUT := $(CURDIR)/$(TARGET)
-export TOPDIR := $(CURDIR)
+export OUTPUT	:=	$(CURDIR)/$(TARGET)
+export TOPDIR	:=	$(CURDIR)
 
-export VPATH := $(foreach dir,$(SOURCES),$(CURDIR)/$(dir)) \
+export VPATH	:=	$(foreach dir,$(SOURCES),$(CURDIR)/$(dir)) \
 			$(foreach dir,$(DATA),$(CURDIR)/$(dir))
 
-export DEPSDIR := $(CURDIR)/$(BUILD)
+export DEPSDIR	:=	$(CURDIR)/$(BUILD)
 
-CFILES := $(foreach dir,$(SOURCES),$(notdir $(wildcard $(dir)/*.c)))
-CPPFILES := $(foreach dir,$(SOURCES),$(notdir $(wildcard $(dir)/*.cpp)))
-SFILES := $(foreach dir,$(SOURCES),$(notdir $(wildcard $(dir)/*.s)))
-BINFILES := $(foreach dir,$(DATA),$(notdir $(wildcard $(dir)/*.*)))
+CFILES		:=	$(foreach dir,$(SOURCES),$(notdir $(wildcard $(dir)/*.c)))
+CPPFILES	:=	$(foreach dir,$(SOURCES),$(notdir $(wildcard $(dir)/*.cpp)))
+SFILES		:=	$(foreach dir,$(SOURCES),$(notdir $(wildcard $(dir)/*.s)))
+BINFILES	:=	$(foreach dir,$(DATA),$(notdir $(wildcard $(dir)/*.*)))
 
 #---------------------------------------------------------------------------------
 # use CXX for linking C++ projects, CC for standard C
 #---------------------------------------------------------------------------------
 ifeq ($(strip $(CPPFILES)),)
 #---------------------------------------------------------------------------------
-	export LD := $(CC)
+	export LD	:=	$(CC)
 #---------------------------------------------------------------------------------
 else
 #---------------------------------------------------------------------------------
-	export LD := $(CXX)
+	export LD	:=	$(CXX)
 #---------------------------------------------------------------------------------
 endif
 #---------------------------------------------------------------------------------
 
-export OFILES_BIN := $(addsuffix .o,$(BINFILES))
-export OFILES_SRC := $(CPPFILES:.cpp=.o) $(CFILES:.c=.o) $(SFILES:.s=.o)
-export OFILES := $(OFILES_BIN) $(OFILES_SRC)
-export HFILES_BIN := $(addsuffix .h,$(subst .,_,$(BINFILES)))
+export OFILES_BIN	:=	$(addsuffix .o,$(BINFILES))
+export OFILES_SRC	:=	$(CPPFILES:.cpp=.o) $(CFILES:.c=.o) $(SFILES:.s=.o)
+export OFILES 	:=	$(OFILES_BIN) $(OFILES_SRC)
+export HFILES_BIN	:=	$(addsuffix .h,$(subst .,_,$(BINFILES)))
 
-export INCLUDE := $(foreach dir,$(INCLUDES),-I$(CURDIR)/$(dir)) \
+export INCLUDE	:=	$(foreach dir,$(INCLUDES),-I$(CURDIR)/$(dir)) \
 			$(foreach dir,$(LIBDIRS),-I$(dir)/include) \
 			-I$(CURDIR)/$(BUILD)
 
-export LIBPATHS := $(foreach dir,$(LIBDIRS),-L$(dir)/lib)
+export LIBPATHS	:=	$(foreach dir,$(LIBDIRS),-L$(dir)/lib)
 
 ifeq ($(strip $(CONFIG_JSON)),)
 	jsons := $(wildcard *.json)
@@ -239,51 +168,36 @@ all: $(BUILD)
 
 $(BUILD):
 	@[ -d $@ ] || mkdir -p $@
-	@$(MAKE) --no-print-directory -C $(BUILD) -f $(CURDIR)/Makefile MAKEFLAGS="$(filter-out -j% -j,$(MAKEFLAGS)) -j"
-
-	@rm -rf out/
-	@mkdir -p out/switch/.overlays/
-	@cp $(CURDIR)/$(TARGET).ovl out/switch/.overlays/$(TARGET).ovl
+	@$(MAKE) --no-print-directory -C $(BUILD) -f $(CURDIR)/Makefile
 
 #---------------------------------------------------------------------------------
 clean:
 	@rm -fr $(BUILD) $(TARGET).ovl $(TARGET).nro $(TARGET).nacp $(TARGET).elf
 
-	@rm -rf out/
-	@rm -f $(TARGET).zip
 
-#---------------------------------------------------------------------------------
-dist: all
-	@echo making dist ...
-
-	@rm -f $(TARGET).zip
-	@cd out; zip -r ../$(TARGET).zip ./*; cd ../
 #---------------------------------------------------------------------------------
 else
-.PHONY: all
+.PHONY:	all
 
-DEPENDS := $(OFILES:.o=.d)
+DEPENDS	:=	$(OFILES:.o=.d)
 
 #---------------------------------------------------------------------------------
 # main targets
 #---------------------------------------------------------------------------------
-all : $(OUTPUT).ovl
+all	:	 $(OUTPUT).ovl
 
-$(OUTPUT).ovl: $(OUTPUT).elf $(OUTPUT).nacp 
+$(OUTPUT).ovl		:	$(OUTPUT).elf $(OUTPUT).nacp 
 	@elf2nro $< $@ $(NROFLAGS)
 	@echo "built ... $(notdir $(OUTPUT).ovl)"
-	@printf 'ULTR' >> $@
-	@printf "Ultrahand signature has been added.\n"
 
+$(OUTPUT).elf	:	$(OFILES)
 
-$(OUTPUT).elf: $(OFILES)
-
-$(OFILES_SRC): $(HFILES_BIN)
+$(OFILES_SRC)	: $(HFILES_BIN)
 
 #---------------------------------------------------------------------------------
 # you need a rule like this for each extension you use as binary data
 #---------------------------------------------------------------------------------
-%.bin.o %_bin.h : %.bin
+%.bin.o	%_bin.h :	%.bin
 #---------------------------------------------------------------------------------
 	@echo $(notdir $<)
 	@$(bin2o)

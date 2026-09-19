@@ -39,13 +39,13 @@ include $(DEVKITPRO)/libnx/switch_rules
 #   of a homebrew executable (.nro). This is intended to be used for sysmodules.
 #   NACP building is skipped as well. #lib/Atmosphere-libs/libexosphere/source/pmic
 #---------------------------------------------------------------------------------
-APP_TITLE := WalkthroughOverlay
-APP_AUTHOR := Soaresden
-APP_VERSION := 2.0.0
-TARGET := WalkthroughOverlay
+APP_TITLE	:= Ultrahand Example
+APP_AUTHOR	:= ppkantorski
+APP_VERSION	:= 1.0.0
+TARGET		:= ovlmenu
 BUILD		:= build
-SOURCES := source
-INCLUDES := include
+SOURCES		:= source common
+INCLUDES	:= source common include
 NO_ICON		:= 1
 
 # This location should reflect where you place the libultrahand directory (lib can vary between projects).
@@ -70,11 +70,11 @@ CFLAGS += $(INCLUDE) -D__SWITCH__ -DAPP_VERSION="\"$(APP_VERSION)\"" -D_FORTIFY_
 #---------------------------------------------------------------------------------
 
 # Overlay UI config path
-UI_OVERRIDE_PATH := /config/WalkthroughOverlay/
+UI_OVERRIDE_PATH := /config/ultrahand_example/
 CFLAGS += -DUI_OVERRIDE_PATH="\"$(UI_OVERRIDE_PATH)\""
 
 # Enable Widget
-#CFLAGS += -DUSING_WIDGET_DIRECTIVE=1
+CFLAGS += -DUSING_WIDGET_DIRECTIVE=1
 
 # Exception wrap utilization (for smaller compilation size)
 CFLAGS += -DUSE_EXCEPTION_WRAP=1
@@ -94,7 +94,7 @@ ASFLAGS := $(ARCH)
 LDFLAGS += -specs=$(DEVKITPRO)/libnx/switch.specs $(ARCH) -Wl,-Map,$(notdir $*.map)
 
 # Essential libraries for Ultrahand Overlay
-LIBS := -lpng -ljpeg -lcurl -lz -lmbedtls -lmbedx509 -lmbedcrypto -lnx
+LIBS := -lcurl -lz -lminizip -lmbedtls -lmbedx509 -lmbedcrypto -lnx
 
 CXXFLAGS += -fno-exceptions -ffunction-sections -fdata-sections -fno-rtti
 LDFLAGS += -Wl,--as-needed -Wl,--gc-sections
